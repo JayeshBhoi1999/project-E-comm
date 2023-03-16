@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet">
+    
+</head>
+<body>
+    {% block content %}
+    <div class="p_container">
+        <div class="wrapper">
+            
+                <div class="all-images">
+                    <div class="small-images">
+                        <div class="img"><img src="{{ product.p_img_1.url }}" id="0" alt="" onclick="clicking(this)"></div>
+                        <div class="img"><img src="{{ product.p_img_2.url }}" id="1" alt="" onclick="clicking(this)"></div>
+                        <div class="img"><img src="{{ product.p_img_3.url }}" id="2" alt="" onclick="clicking(this)"></div>
+                        <div class="img"><img src="{{ product.p_img_4.url }}" id="3" alt="" onclick="clicking(this)"></div>
+                        
+                    </div>
+                    <div class="main-images">
+                        <img src="" id="imagebox" alt="">
+                    </div>
+                    <div>
+                        <span class="dot" id="d0"></span>
+                        <span class="dot" id="d1"></span>
+                        <span class="dot" id="d2"></span>
+                        <span class="dot" id="d3"></span>
+                    </div>
+                </div>
+            
+            <div class="text">
+                <div class="content">
+                    <p class="brand"> brand : Soal</p>
+                    <h2>{{ product.product_name }}</h2>
+                    <div class="review">
+                        <span>(4.6)</span>
+                        <span class="fa fa-star"></span>
+                    </div>
+                    <div class="price-box">
+                        <p class="price">&#8377; {{ product.product_price}}</p><strike>&#8377; 2500</strike>
+                    </div>
+                    <p>Color : <select name="size" id="">
+                        <option value="black">black</option>
+                        <option value="green">green</option>
+                        <option value="blue">blue</option>
+                    </select></p>
+                    <p>quantity <input type="text"></p>
+                    <button>
+                        <span class="fa fa-shopping-cart"></span>
+                        add to cart
+                    </button>
+                    <br>
+                    
+                    <button class="buy">
+                        <span class="fa fa-shopping-cart"></span>
+                        buy now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script defer>
+
+    
+
+    const fullImg = document.getElementById("imagebox") 
+    let selected_image = document.getElementById("0") 
+    let selected_dot = document.getElementById("d0")
+    selected_dot.style.backgroundColor = "darkgray";
+    
+    fullImg.src = selected_image.src;
+    var  selected_index = 0;
+    function clicking(smallImg){
+    
+        fullImg.src = smallImg.src;
+        }
+    
+    var element = document.querySelector(".small-images");
+    var numberOfChildren = element.children
+    console.log(numberOfChildren);
+    
+    const carousel = document.querySelector(".main-images");
+    
+    carousel.addEventListener('touchstart', handleTouchStart, false);
+    carousel.addEventListener('touchmove', handleTouchMove, false);
+    carousel.addEventListener("touchend", handleTouchStop ,false);
+
+    carousel.addEventListener('onmousedown', handleTouchStart, false);        
+    carousel.addEventListener('onmousemove', handleTouchMove, false);
+    carousel.addEventListener("onmouseup", handleTouchStop ,false);
+    
+    
+    var xDown = null;                                                        
+    var yDown = null;
+    let direction = null;
+    function getTouches(evt) {
+      return evt.touches || evt.originalEvent.touches;         // browser API
+     // jQuery
+    }                                                     
+                                                                             
+    function handleTouchStart(evt) {
+        let firstTouch = getTouches(evt)[0];                                      
+        xDown = firstTouch.clientX;                                      
+        yDown = firstTouch.clientY;  
+        direction = null;                                    
+    };                                                
+                                                                             
+    function handleTouchMove(evt) {
+        if ( ! xDown || ! yDown ) {
+            return;
+        }
+    
+        var xUp = evt.touches[0].clientX;                                    
+        var yUp = evt.touches[0].clientY;
+    
+        var xDiff = xDown - xUp;
+        let opacity =( 1 - Math.abs(xDiff)*0.01);
+        opacity < 0.25 ? opacity = 0.25 : opacity = opacity; 
+        fullImg.style.opacity = (opacity).toString();
+        var yDiff = yDown - yUp;
+                                                                             
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+            if ( xDiff > 0 ) {
+                /* right swipe */
+                //console.log("right swipe") 
+                direction = "right"
+                return;
+            } else {
+                /* left swipe */
+                //console.log("left swipe")
+                direction = "left"
+                return;
+            }                       
+        } else {
+            if ( yDiff > 0 ) {
+                /* down swipe */ 
+                //console.log("down swipe")
+               direction = "down"
+               return;
+            } else { 
+                /* up swipe */
+                //console.log("up swipe")
+                direction = "up"
+                return;
+            }                                                                 
+        }
+        /* reset values */
+        xDown = null;
+        yDown = null; 
+        direction = null;                                            
+    };
+    
+    async function handleTouchStop(evt){
+    
+        if (direction == "right"){
+            //console.log(selected_image)
+            var element = document.querySelector(".small-images");
+            var numberOfChildren = element.children.length
+            console.log(numberOfChildren);
+            if (selected_index == numberOfChildren-1){
+                console.log("end loop")
+                selected_index = await 0
+            }
+            else{
+                selected_index = selected_index + 1 ;
+            }
+            selected_image = document.getElementById(selected_index.toString());
+            fullImg.src = selected_image.src     
+            
+            var elements = document.getElementsByClassName('dot'); // get all elements
+            for(var i = 0; i < elements.length; i++){
+                if(elements[i].id == "d"+selected_index){
+                    elements[i].style.backgroundColor = "darkgray";
+                    console.log(elements[i])
+                }
+                else{
+                    elements[i].style.backgroundColor = "lightgray";
+                }
+            }
+            
+        }
+        if (direction == "left"){
+            //console.log(selected_image)
+            var element = document.querySelector(".small-images");
+            var numberOfChildren = element.children.length
+            console.log(numberOfChildren);
+            if (selected_index == 0 ){
+                console.log("end loop");
+                selected_index = await numberOfChildren-1;
+            }
+            else{
+                selected_index = selected_index - 1 ;
+            }
+            selected_image = document.getElementById(selected_index.toString());
+            fullImg.src = selected_image.src;
+    
+            
+            var elements = document.getElementsByClassName('dot'); // get all elements
+            for(var i = 0; i < elements.length; i++){
+                if(elements[i].id == "d"+selected_index){
+                    elements[i].style.backgroundColor = "darkgray";
+                    console.log(elements[i])
+                }
+                else{
+                    elements[i].style.backgroundColor = "lightgray";
+                }
+            }
+    
+            
+        }
+        fullImg.style.opacity = 1;
+    }
+    
+        </script>
+
+    <style>
+    
+
+    .p_container{
+    width: auto;
+    margin-left: 50px;
+    margin-right: 50px;
+    }
+
+    .wrapper{
+    width: auto;
+    height: auto; 
+    display: flex;
+    }
+
+    .text{
+    width: 100%;
+    padding: 5px;
+
+    }
+
+    .all-images{
+    height:auto ;
+    display: flex;
+    padding: 5px;
+    }
+
+    .small-images{
+    display: flex;
+    flex-direction: column;
+
+    padding: 5px;
+    }
+
+
+    .small-images img {
+    height: 80px;
+    width: 80px;
+    cursor: pointer;
+    opacity: 0.6;
+    overflow: hidden;
+    position: relative;
+    object-fit: scale-down;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 3px;
+    }
+
+    .small-images img:hover{
+    opacity: 1;
+    }
+
+    .main-images{
+    padding: 5px;
+    }
+    .main-images img{
+    height: 500px;
+    width: 500px;
+    padding: 5px;
+    object-fit: scale-down;
+    border-radius: 5px;
+    }
+
+    p{
+    margin: 2px;
+    }
+
+    .brand{
+    background-color: #008000;
+    width:fit-content;
+    color: #ffff;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    }
+
+    h2{
+
+    font-size: 35px;
+    color: #555;
+    margin: 2px;
+    }
+
+    .review{
+    background-color: #008000;
+    display: inline-block;
+    color: #ffff;
+    padding: 4px;
+    border-radius: 5px;
+    font-size: 15px;
+    }
+    .review .fa{
+    counter-reset:#fff;
+    }
+
+    .price{
+    color: rgb(29, 28,28);
+    font-size: 26px;
+    font-weight: bold;
+    padding: 5px;
+    }
+
+    .price-box{
+    display: flex;
+    align-items: center;
+    }
+
+    input{
+    width: 30px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    text-align: center;
+    }
+
+    button{
+    width: 100%;
+    color: #ffff;
+    font-size: 15px;
+    outline: none;
+    border: 0;
+    border-radius: 5px;
+    background-color: #fe980f;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-top: 5px;
+    display: inline-block;
+    }
+
+    button .fa{
+
+    margin: 10px;
+
+    }
+    .buy{
+    background-color: rgb(201,97,57);
+    }
+    .dot {
+    height: 20px;
+    width: 20px;
+    background-color: lightgray;
+    border-radius: 50%;
+    display:none;
+    margin-left: 5px;
+    margin-right: 5px ;
+    }
+
+    @media (max-width:1000px){
+    .small-images{
+        display: none;
+        
+    }  
+    .wrapper{
+        flex-direction: column;
+    }
+    .all-images{
+        align-items: center;
+        width: auto;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .main-images{
+        align-items: center;
+    }
+
+    .p_container{
+        width: auto;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .dot{
+        display: inline-block;
+        padding: 5px;
+    }
+
+
+    }
+
+    @media (max-width:500px){
+    .main-images img{
+        width: 350px;
+        height: 350px;
+    }
+    .p_container{
+        width: auto;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    }
+</style>
+    {% endblock content %}
+</body>
+
+    
+</html>
+

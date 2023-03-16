@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block content %}
+    <div class="body" >
+        <div class="mycontainer">
+            {% for product in products %}
+            <div class="card" >
+                <a class="imgContainer" href="{% url 'product_page' product.p_slug %}">
+                    <img src="{{ product.p_img_1.url }}" alt=""/>
+                  
+                </a>
+                <div class="infoBox">
+                    <div class="rating">
+                        <img src={rstar} alt=""/>
+                        <img src={rstar} alt=""/>
+                        <img src={rstar} alt=""/>
+                        <img src={rstar} alt=""/>
+                        <img src={rstar} alt=""/>
+                    </div>
+                    <div class="title" id ="namepr{{product.id}}" >{{ product.product_name }}</div>
+                    <div class="price" id="pricepr{{product.id}}">Rs.{{ product.product_price }}</div>
+
+                    <div class="buttonGroup">
+                        <button class="buy">buy </button>
+                        <button class="addToCart" id="pr{{ product.id }}">addToCart</button>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+      
+       </div> 
+  </div>
+  <script>
+    if(localStorage.getItem('cart') == null){
+        var cart = {};
+        updatePopover(cart);
+    }
+    else{
+        cart = JSON.parse(localStorage.getItem('cart'));
+        var sum = 0 ;
+        
+        for (var item in cart ){
+            sum = sum + cart[item][0];}
+        document.getElementById('cart-count').innerHTML = sum;
+        updatePopover(cart);
+    }
+
+    $('.addToCart').click(function(){
+        var idstr = this.id.toString();
+        if (cart[idstr] !=undefined){
+            qty = cart[idstr][0] + 1;
+            name = document.getElementById('name'+idstr).innerHTML;
+            price = document.getElementById('price'+idstr).innerHTML;
+            price = price.replace("Rs.", "");
+            cart[idstr] = [qty,name,price,(price*qty)] ;  
+        }
+        else{
+            qty = 1;
+            name = document.getElementById('name'+idstr ).innerHTML;
+            price = document.getElementById('price'+idstr).innerHTML;
+            price = price.replace("Rs.", "");                
+            cart[idstr] = [qty,name,price,(price*qty)];
+            
+        }
+        var sum=0 ;
+        for (var item in cart ){
+            sum = sum + cart[item][0];
+        }
+        
+        localStorage.setItem('cart',JSON.stringify(cart));
+        document.getElementById('cart-count').innerHTML = sum;
+        updatePopover(cart);
+    });
+    $('#popcart').popover();
+
+    function clearCart(){
+        cart = JSON.parse(localStorage.getItem('cart'));
+        localStorage.clear();
+        cart = {};
+        updatePopover(cart);
+        document.getElementById('cart-count').innerHTML = 0;
+        
+    }
+    function updatePopover(cart){
+            
+        var popStr = "";
+        popStr = popStr + "<h5>Items In Cart</h5>";
+        var i =1;
+        Total = 0;
+        for (var item  in cart){
+            Total = Total + (cart[item][0] * cart[item][2]);     
+            popStr = popStr +"<b>" + i + " </b>";
+            popStr = popStr +document.getElementById('name'+item ).innerHTML + " Qty : " + cart[item][0]+ " Price : " + cart[item][2] +"<br>";
+            i = i + 1;               
+        }
+        
+        popStr = popStr + "<h5>Total : Rs. "+ Total +" </h5>";
+        popStr = popStr + "<a href='#'><button class = 'btn btn-primary' id='checkout'>Checkout</button> </a>";
+        popStr = popStr + "<button class = 'btn btn-primary' id='clearCart' onclick='clearCart()'>ClearCart</button>"; 
+        document.getElementById('popcart').setAttribute('data-content',popStr);
+        $('#popcart').popover('show');
+    }
+  </script>
+   {% endblock content %}
+
