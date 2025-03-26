@@ -166,7 +166,7 @@ header{
  .card{
     background-color: #fff;
     width: auto;
-    height: 340px;
+    height: auto;
     border-radius: 10px;
     
  }

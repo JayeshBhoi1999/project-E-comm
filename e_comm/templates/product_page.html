@@ -18,11 +18,9 @@
             
                 <div class="all-images">
                     <div class="small-images">
-                        <div class="img"><img src="{{ product.p_img_1.url }}" id="0" alt="" onclick="clicking(this)"></div>
-                        <div class="img"><img src="{{ product.p_img_2.url }}" id="1" alt="" onclick="clicking(this)"></div>
-                        <div class="img"><img src="{{ product.p_img_3.url }}" id="2" alt="" onclick="clicking(this)"></div>
-                        <div class="img"><img src="{{ product.p_img_4.url }}" id="3" alt="" onclick="clicking(this)"></div>
-                        
+                        {% for image in images %}
+                            <div class="img"><img src="{{ image.image.url }}" id="{{ forloop.counter0 }}" alt="" onclick="clicking(this)"></div>
+                        {% endfor %}
                     </div>
                     <div class="main-images">
                         <img src="" id="imagebox" alt="">
@@ -46,12 +44,12 @@
                     <div class="price-box">
                         <p class="price">&#8377; {{ product.product_price}}</p><strike>&#8377; 2500</strike>
                     </div>
-                    <p>Color : <select name="size" id="">
+                    {% comment %} <p>Color : <select name="size" id="">
                         <option value="black">black</option>
                         <option value="green">green</option>
                         <option value="blue">blue</option>
                     </select></p>
-                    <p>quantity <input type="text"></p>
+                    <p>quantity <input type="text"></p> {% endcomment %}
                     <button>
                         <span class="fa fa-shopping-cart"></span>
                         add to cart
@@ -70,7 +68,6 @@
 
     <script defer>
 
-    
 
     const fullImg = document.getElementById("imagebox") 
     let selected_image = document.getElementById("0") 

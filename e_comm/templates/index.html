@@ -8,17 +8,17 @@
             {% for product in products %}
             <div class="card" >
                 <a class="imgContainer" href="{% url 'product_page' product.p_slug %}">
-                    <img src="{{ product.p_img_1.url }}" alt=""/>
+                    <img src="{{ product.main_img.url }}" alt=""/>
                   
                 </a>
                 <div class="infoBox">
-                    <div class="rating">
+                    {% comment %} <div class="rating">
                         <img src={rstar} alt=""/>
                         <img src={rstar} alt=""/>
                         <img src={rstar} alt=""/>
                         <img src={rstar} alt=""/>
                         <img src={rstar} alt=""/>
-                    </div>
+                    </div> {% endcomment %}
                     <div class="title" id ="namepr{{product.id}}" >{{ product.product_name }}</div>
                     <div class="price" id="pricepr{{product.id}}">Rs.{{ product.product_price }}</div>
 
@@ -37,7 +37,9 @@
   <script>
     if(localStorage.getItem('cart') == null){
         var cart = {};
+        // console.log('hello');
         updatePopover(cart);
+        $('#popcart').popover('hide');
     }
     else{
         cart = JSON.parse(localStorage.getItem('cart'));

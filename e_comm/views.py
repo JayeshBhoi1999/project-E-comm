@@ -9,5 +9,10 @@ def home(request):
 
 def product_page(request,p_slug):
     product = Product.objects.get(p_slug=p_slug)
-    return render(request,"product_page.html",{"product":product})
+    images = product.image_set.all()
+
+    for image in images:
+        print(image.image.url)
+
+    return render(request,"product_page.html",{"product":product,"images":images })
 
