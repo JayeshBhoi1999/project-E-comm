@@ -1,3 +1,5 @@
 .env
 /env
 /images
+/e_comm/__pycache__
+/e_comm/migrations
