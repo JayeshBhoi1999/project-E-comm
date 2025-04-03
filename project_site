@@ -1,0 +1,16 @@
+server {
+    listen 80;
+    server_name 3.88.232.29;
+
+    # Serve static files (handled by Whitenoise in Django)
+    location /static/ {
+        alias /home/ubuntu/project-E-comm/staticfiles_build/static/;  # Change to your actual static directory
+        expires 30d;  # Cache for 30 days
+        add_header Cache-Control "public, no-transform, max-age=2592000";
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;  # Gunicorn or your WSGI server
+    }
+}
