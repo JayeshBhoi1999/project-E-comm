@@ -7,10 +7,10 @@ echo "Updating system packages..."
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y python3-pip python3-dev nginx virtualenv git ufw libjpeg-dev zlib1g-dev
 
-# Clone the project
-echo "Cloning the project repository..."
-git clone https://github.com/JayeshBhoi1999/project-E-comm.git
-cd project-E-comm/ || { echo "Failed to enter project directory"; exit 1; }
+# # Clone the project
+# echo "Cloning the project repository..."
+# git clone https://github.com/JayeshBhoi1999/project-E-comm.git
+# cd project-E-comm/ || { echo "Failed to enter project directory"; exit 1; }
 
 # Set up virtual environment
 echo "Setting up virtual environment..."
