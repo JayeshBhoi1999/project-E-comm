@@ -28,7 +28,8 @@ sudo ufw allow 8000
 # Create .env file
 echo "Creating .env file..."
 touch .env
-nano .env  # You may replace this with echo statements if you want to automate it.
+echo "SECRET_KEY=django-insecure-f-0^una^mvj4d&20pqo$lsj2m%wbt)&q@o-yu6)gfo0m2@plar" > .env
+#nano .env  # You may replace this with echo statements if you want to automate it.
 
 # Database migrations
 echo "Applying migrations..."
