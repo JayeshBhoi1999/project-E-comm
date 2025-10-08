@@ -8,7 +8,7 @@
             {% for product in products %}
             <div class="card" >
                 <a class="imgContainer" href="{% url 'product_page' product.p_slug %}">
-                    <img src="{{ product.p_img_1.url }}" alt=""/>
+                    <img src="{{ product.main_img.url }}" alt=""/>
                   
                 </a>
                 <div class="infoBox">

@@ -12,6 +12,8 @@ def home(request):
 
 def product_page(request,p_slug):
     product = Product.objects.get(p_slug=p_slug)
+
+    print(product)
     return render(request,"product_page.html",{"product":product})
 
 
